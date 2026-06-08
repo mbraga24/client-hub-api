@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 // Customer REST controller - handles all incoming HTTP requests for customer operations
+// Endpoint: api/v1/customers
 @RestController
 @RequestMapping("api/v1/customers")
 public class CustomerController {
