@@ -46,7 +46,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     }
 
     @Override
-    public void insertCustomer(Customer customer) {
+    public Long insertCustomer(Customer customer) {
         var sql = """
                 INSERT INTO customer (name, email, age)
                 VALUES (?, ?, ?)
@@ -57,6 +57,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                 customer.getAge()
         );
         log.info("insertCustomer :: " + result + " ROW ADDED");
+        return null; // TODO: implement ID retrieval if JDBC qualifier is activated
     }
 
     @Override
