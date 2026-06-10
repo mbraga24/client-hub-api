@@ -2,6 +2,9 @@ package com.havefunwith.customer;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 import java.util.List;
 
@@ -20,33 +23,38 @@ public class CustomerController {
 
     // @RequestMapping(value = "/api/v1/customers", method = RequestMethod.GET)
     @GetMapping
-    public List<Customer> getCustomers() {
-        return customerService.getAllCustomers();
+    public ResponseEntity<List<Customer>> getCustomers() {
+        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
     @GetMapping("{customerId}")
-    public Customer getCustomer(@PathVariable("customerId") Long customerId) {
-        return customerService.getCustomer(customerId);
+    public ResponseEntity<Customer> getCustomer(@PathVariable("customerId") Long customerId) {
+        return ResponseEntity.ok(customerService.getCustomer(customerId));
     }
 
     @PostMapping
-    public ResponseEntity<String> registerCustomer(@RequestBody CustomerRegistrationRequest request) {
-        customerService.addCustomer(request);
-        return ResponseEntity.ok("Customer successfully added");
+    public ResponseEntity<Void> registerCustomer(@RequestBody CustomerRegistrationRequest request) {
+        Long customerId = customerService.addCustomer(request);
+        URI location = ServletUriComponentsBuilder
+        .fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(customerId)
+        .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("{customerId}")
-    public ResponseEntity<String> deleteCustomer(@PathVariable Long customerId) {
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId) {
         customerService.deleteCustomer(customerId);
-        return ResponseEntity.ok("Customer deleted successfully");
+        return ResponseEntity.noContent().build(); // RESTful No content 204 
     }
 
     @PutMapping("{customerId}")
-    public ResponseEntity<String> updateCustomer(
-            @PathVariable Long customerId,
+    public ResponseEntity<Void> updateCustomer(
+            @PathVariable("customerId") Long customerId,
             @RequestBody CustomerUpdateRequest request) {
         customerService.updateCustomer(customerId, request);
-        return ResponseEntity.ok("Customer updated successfully.");
+        return ResponseEntity.noContent().build(); // RESTful No content 204
     }
 
 }

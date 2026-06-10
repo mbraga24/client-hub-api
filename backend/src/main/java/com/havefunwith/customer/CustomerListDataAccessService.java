@@ -34,8 +34,9 @@ public class CustomerListDataAccessService implements CustomerDao {
     }
 
     @Override
-    public void insertCustomer(Customer customer) {
+    public Long insertCustomer(Customer customer) {
         customers.add(customer);
+        return customer.getId();
     }
 
     @Override

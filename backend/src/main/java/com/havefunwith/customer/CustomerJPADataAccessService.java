@@ -28,8 +28,9 @@ public class CustomerJPADataAccessService implements CustomerDao {
     }
 
     @Override
-    public void insertCustomer(Customer customer) {
+    public Long insertCustomer(Customer customer) {
         customerRepository.save(customer);
+        return customer.getId();
     }
 
     @Override

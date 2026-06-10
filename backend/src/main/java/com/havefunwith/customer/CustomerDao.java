@@ -9,7 +9,7 @@ public interface CustomerDao {
 
      Optional<Customer> selectCustomerById(Long id);
 
-     void insertCustomer(Customer customer);
+     Long insertCustomer(Customer customer);
 
      void deleteCustomer(Long id);
 
