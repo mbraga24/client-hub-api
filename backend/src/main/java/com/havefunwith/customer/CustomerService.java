@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
+// @RequiredArgsConstructor // Lombok annotation to generate constructor for final fields
 public class CustomerService {
 
     private final CustomerDao customerDAO;

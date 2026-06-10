@@ -28,7 +28,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                 SELECT id, name, email, age 
                 FROM customer;
                 """;
-        log.info("selectAllCustomers ::");
+        log.info("selectAllCustomers :: FETCHING ALL CUSTOMERS");
         return jdbcTemplate.query(sql, customerRowMapper);
     }
 
@@ -39,7 +39,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                 FROM customer
                 WHERE id = ?
                 """;
-        log.info("selectCustomerById ::");
+        log.info("selectCustomerById :: FETCHING CUSTOMER WITH ID: [{}]", id);
         return jdbcTemplate.query(sql, customerRowMapper, id)
                 .stream()
                 .findFirst();
@@ -56,20 +56,20 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                 customer.getEmail(),
                 customer.getAge()
         );
-        log.info("insertCustomer :: " + result + " ROW ADDED");
-        return null; // TODO: implement ID retrieval if JDBC qualifier is activated
+        log.info("insertCustomer :: [{}] ROW ADDED", result);
+        return null; // TODO: MUST implement ID retrieval if JDBC qualifier is activated
     }
 
     @Override
     public void deleteCustomer(Long id) {
-        log.info("CustomerJDBCDataAccessService :: deleteCustomer ====> " + id);
+        log.info("deleteCustomer :: DELETE CUSTOMER OF ID [{}]", id);
         var sql = """
                 DELETE 
                 FROM customer
                 WHERE id = ?
                 """;
         int result = jdbcTemplate.update(sql, id);
-        log.info("deleteCustomer :: " + result + " ROW DELETED");
+        log.info("deleteCustomer :: [{}] ROW DELETED", result);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                     sql,
                     customer.getEmail(),
                     customer.getId());
-            log.info("updateCustomer :: " +  customer.getEmail() + " UPDATED");
+            log.info("updateCustomer :: CUSTOMER [{}] UPDATED", customer.getEmail());
         }
 
         if (customer.getName() != null) {
@@ -99,7 +99,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                     sql,
                     customer.getName(),
                     customer.getId());
-            log.info("updateCustomer :: " +  customer.getName() + " UPDATED");
+            log.info("updateCustomer :: CUSTOMER [{}] UPDATED", customer.getName());
         }
 
         if (customer.getAge() != null) {
@@ -112,12 +112,13 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                     sql,
                     customer.getAge(),
                     customer.getId());
-            log.info("updateCustomer :: " +  customer.getAge() + " UPDATED");
+            log.info("updateCustomer :: CUSTOMER [{}] UPDATED", customer.getAge());
         }
     }
 
     @Override
     public boolean existsPersonWithEmail(String email) {
+        log.info("existsPersonWithEmail :: CHECKING IF CUSTOMER WITH EMAIL [{}] EXISTS", email);
         var sql = """
                 SELECT COUNT(email)
                 FROM customer
@@ -129,6 +130,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public boolean existsPersonById(Long id) {
+        log.info("existsPersonById :: CHECKING IF CUSTOMER WITH ID [{}] EXISTS", id);
         var sql = """
                 SELECT COUNT(id)
                 FROM customer
