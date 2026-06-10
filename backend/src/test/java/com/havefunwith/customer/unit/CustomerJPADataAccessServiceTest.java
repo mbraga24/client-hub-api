@@ -1,10 +1,8 @@
 package com.havefunwith.customer.unit;
 
-import com.github.javafaker.Faker;
 import com.havefunwith.customer.Customer;
 import com.havefunwith.customer.CustomerJPADataAccessService;
 import com.havefunwith.customer.CustomerRepository;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 /*
     Data Access Service Layer test
@@ -34,17 +31,13 @@ class CustomerJPADataAccessServiceTest {
 //        underTest = new CustomerJPADataAccessService(customerRepository); // manually inject mocks into CustomerJPADataAccessService
     }
 
-    /*
-        TO DO COMMENTS
-     */
+    // Closes all mocks after each test to release resources.
     @AfterEach
     void tearDown() throws Exception {
         autoCloseable.close();
     }
 
-    /*
-        TO DO COMMENTS
-    */
+    // Verifies that selectAllCustomers() delegates to repository.findAll().
     @Test
     void selectAllCustomers() {
         underTest.selectAllCustomers();
@@ -52,9 +45,7 @@ class CustomerJPADataAccessServiceTest {
         Mockito.verify(customerRepository)
                 .findAll();
     }
-    /*
-        TO DO COMMENTS
-    */
+    // Verifies that selectCustomerById() delegates to repository.findById() with the given ID.
     @Test
     void selectCustomerById() {
         long customerId = -1;
@@ -64,9 +55,7 @@ class CustomerJPADataAccessServiceTest {
         Mockito.verify(customerRepository)
                 .findById(customerId);
     }
-    /*
-        TO DO COMMENTS
-    */
+    // Verifies that insertCustomer() delegates to repository.save() with the given customer.
     @Test
     void insertCustomer() {
         Customer customer = new Customer(
@@ -80,9 +69,7 @@ class CustomerJPADataAccessServiceTest {
         Mockito.verify(customerRepository)
                 .save(customer);
     }
-    /*
-        TO DO COMMENTS
-    */
+    // Verifies that existsPersonWithEmail() delegates to repository.existsCustomerByEmail() with the given email.
     @Test
     void existsPersonWithEmail() {
         String email = "john_doe@email.com";
@@ -92,9 +79,7 @@ class CustomerJPADataAccessServiceTest {
         Mockito.verify(customerRepository)
                 .existsCustomerByEmail(email);
     }
-    /*
-        TO DO COMMENTS
-    */
+    // Verifies that existsPersonById() delegates to repository.existsCustomerById() with the given ID.
     @Test
     void existsPersonById() {
         long customerId = 1;
@@ -104,9 +89,7 @@ class CustomerJPADataAccessServiceTest {
         Mockito.verify(customerRepository)
                 .existsCustomerById(customerId);
     }
-    /*
-        TO DO COMMENTS
-    */
+    // Verifies that deleteCustomer() delegates to repository.deleteById() with the given ID.
     @Test
     void deleteCustomer() {
         long customerId = 1;
@@ -116,9 +99,7 @@ class CustomerJPADataAccessServiceTest {
         Mockito.verify(customerRepository)
                 .deleteById(customerId);
     }
-    /*
-        TO DO COMMENTS
-    */
+    // Verifies that updateCustomer() delegates to repository.save() with the given customer.
     @Test
     void updateCustomer() {
         Customer customer = new Customer(

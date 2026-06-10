@@ -102,6 +102,7 @@ class CustomerServiceTest {
         // Mock the DAO layer to return false when checking if email already exists
         // in the system.
         Mockito.when(customerDao.existsPersonWithEmail(email)).thenReturn(false);
+        Mockito.when(customerDao.insertCustomer(any())).thenReturn(1L);
 
         // Invoke the method of the service under test with the provided customer request object.
         underTest.addCustomer(customerRequest);

@@ -50,14 +50,15 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
         var sql = """
                 INSERT INTO customer (name, email, age)
                 VALUES (?, ?, ?)
+                RETURNING id
                 """;
-        int result = jdbcTemplate.update(sql,
+        Long customerId = jdbcTemplate.queryForObject(sql, Long.class,
                 customer.getName(),
                 customer.getEmail(),
                 customer.getAge()
         );
-        log.info("insertCustomer :: [{}] ROW ADDED", result);
-        return null; // TODO: MUST implement ID retrieval if JDBC qualifier is activated
+        log.info("insertCustomer :: [{}] ROW ADDED", customerId);
+        return customerId;
     }
 
     @Override

@@ -29,7 +29,9 @@ public class CustomerIntegrationTest {
     private final Random RANDOM = new Random();
 
     /*
-        TO DO COMMENTS
+        Verifies the full customer registration flow end-to-end.
+        POSTs a new customer, confirms it appears in the list of all customers,
+        then fetches it by ID and asserts all attributes match.
     */
     @Test
     void canRegisterACustomer() {
@@ -51,7 +53,7 @@ public class CustomerIntegrationTest {
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isCreated();
 
         // find all customers
         List<Customer> allCustomers = webTestClient.get()
@@ -96,7 +98,9 @@ public class CustomerIntegrationTest {
     }
 
     /*
-        TO DO COMMENTS
+        Verifies the full customer deletion flow end-to-end.
+        POSTs a new customer, retrieves its ID from the customer list,
+        deletes it by ID, then confirms a subsequent fetch returns 404 Not Found.
     */
     @Test
     void canDeleteCustomer() {
@@ -118,7 +122,7 @@ public class CustomerIntegrationTest {
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isCreated();
 
         // find all customer
         List<Customer> allCustomers = webTestClient.get()
@@ -145,7 +149,7 @@ public class CustomerIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isNoContent();
 
         // check if customer was deleted
         webTestClient.get()
@@ -157,7 +161,10 @@ public class CustomerIntegrationTest {
     }
 
     /*
-        TO DO COMMENTS
+        Verifies the full customer update flow end-to-end.
+        POSTs a new customer, retrieves its ID, sends a PUT request with all
+        updated fields, then fetches the customer by ID and asserts all
+        attributes reflect the changes.
     */
     @Test
     void canUpdateCustomer() {
@@ -178,7 +185,7 @@ public class CustomerIntegrationTest {
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isCreated();
 
         // find all customers
         List<Customer> allCustomers = webTestClient.get()
@@ -213,7 +220,7 @@ public class CustomerIntegrationTest {
                 .body(Mono.just(updateRequest), CustomerUpdateRequest.class)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isNoContent();
 
         // expected customer
         Customer expectedCustomer = new Customer(

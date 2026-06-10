@@ -4,17 +4,14 @@ import com.havefunwith.AbstractTestcontainers;
 import com.havefunwith.customer.Customer;
 import com.havefunwith.customer.CustomerJDBCDataAccessService;
 import com.havefunwith.customer.CustomerRowMapper;
-import com.havefunwith.customer.CustomerUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /*
     Data Access Layer or DAO (Data Access Object) Layer test
