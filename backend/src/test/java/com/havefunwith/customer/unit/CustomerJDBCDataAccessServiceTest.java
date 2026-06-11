@@ -203,7 +203,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
         // Generate fake customer data and create a new customer object.
         String name = FAKER.name().fullName();
-        String email = FAKER.internet().safeEmailAddress();
+        String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
                 name,
                 20,
@@ -251,7 +251,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
         // Generate fake customer data and create new customer object.
         String name = FAKER.name().fullName();
-        String email = FAKER.internet().safeEmailAddress();
+        String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
                 name,
                 20,
