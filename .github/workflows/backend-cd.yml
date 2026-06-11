@@ -10,6 +10,7 @@ on:
       - main
     paths:
       - backend/**
+      - .github/workflows/backend-cd.yml
 
 # -------------------------------------------------------------------------
 # PostgreSQL service container database set up
