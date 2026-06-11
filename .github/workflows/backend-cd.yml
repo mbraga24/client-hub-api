@@ -16,9 +16,9 @@ jobs:
       postgres:
         image: postgres:15.3
         env:
-          POSTGRES_USER: marlontest
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: customer
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: adminpassword
+          POSTGRES_DB: customer_db
         ports:
           - 5332:5432
         options:
