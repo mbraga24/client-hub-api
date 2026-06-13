@@ -94,7 +94,7 @@ jobs:
       - name: Share SonarCloud Coverage Report
         run: >
           curl -X POST -H 'Content-type: application/json'
-          --data '{"text": "📊 Code coverage report available: https://sonarcloud.io/project/overview?id=${{ secrets.SONAR_PROJECT_KEY }}"}'
+          --data '{"text": ":bar_chart: Code coverage report available: https://sonarcloud.io/project/overview?id=${{ secrets.SONAR_PROJECT_KEY }}"}'
           ${{ secrets.SLACK_WEBHOOK_URL }}
       # -------------------------------------------------------------------------
       # Success/Failure notification to Slack (always runs)
