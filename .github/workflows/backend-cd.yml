@@ -92,22 +92,23 @@ jobs:
           curl -X POST -H 'Content-type: application/json'
           --data '{"text": ":docker: Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to ${{ secrets.DOCKER_REPO }}"}'
           ${{ secrets.SLACK_WEBHOOK_URL }}
+      # -------------------------------------------------------------------------
+      # Code Coverage Report
+      # -------------------------------------------------------------------------
+      - name: Share SonarCloud Coverage Report
+        run: >
+          curl -X POST -H 'Content-type: application/json'
+          --data '{"text": "📊 Code coverage report available: https://sonarcloud.io/project/overview?id=${{ secrets.SONAR_PROJECT_KEY }}"}'
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+      # -------------------------------------------------------------------------
+      # Success/Failure notification to Slack (always runs)
+      # -------------------------------------------------------------------------      
       - name: Send Slack Message
         if: always()
         run: >
           curl -X POST -H 'Content-type: application/json'
           --data '{"text":"Job Status: ${{ job.status }} :party_yay:"}'
           ${{ secrets.SLACK_WEBHOOK_URL }}
-      # -------------------------------------------------------------------------
-      # Code Coverage Report
-      # -------------------------------------------------------------------------
-      - name: Share SonarCloud Coverage Report
-        run: |
-          curl -X POST \
-            -H 'Content-type: application/json \
-            --data '{"text": "📊 Code coverage report available: https://sonarcloud.io/project/overview?id=${{ secrets.SONAR_PROJECT_KEY }}"}' \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
-
 
       # -------------------------------------------------------------------------
       # AWS Elastic Beanstalk deployment steps (commented out - not in use)
