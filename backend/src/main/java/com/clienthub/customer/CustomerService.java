@@ -49,6 +49,8 @@ public class CustomerService {
             throw new DuplicatedResourceException("Customer with email [%s] already exist.".formatted(email));
         }
         Customer customer = new Customer(
+                customerCreateRequest.appUserId(),
+                customerCreateRequest.username(),
                 customerCreateRequest.firstName(),
                 customerCreateRequest.lastName(),
                 customerCreateRequest.age(),
