@@ -1,5 +1,8 @@
-package com.clienthub.customer;
+package com.clienthub.demo;
 
+import com.clienthub.customer.Customer;
+import com.clienthub.customer.CustomerDataAccess;
+import com.clienthub.customer.CustomerRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.lang.NonNull;
@@ -9,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 /*
-    Data Access Layer
+    Data Access Layer - JDBC Demo Implementation
  */
 @Slf4j
 @Repository("jdbc")

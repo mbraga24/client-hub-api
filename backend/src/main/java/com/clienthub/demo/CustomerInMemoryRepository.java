@@ -1,12 +1,14 @@
-package com.clienthub.customer;
+package com.clienthub.demo;
 
+import com.clienthub.customer.Customer;
+import com.clienthub.customer.CustomerDataAccess;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Repository("list") // naming bean
+@Repository("list")
 public class CustomerInMemoryRepository implements CustomerDataAccess {
 
     private static List<Customer> customers;
