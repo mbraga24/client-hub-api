@@ -14,8 +14,8 @@ public class CustomerInMemoryRepository implements CustomerDataAccess {
     static {
         customers = new ArrayList<>();
 
-        Customer john = new Customer((long) 1.0, "John", 24, "john@email.com");
-        Customer keyla = new Customer((long) 2.0, "Keyla", 28, "keila@email.com");
+        Customer john = new Customer(1L, "john_doe", "John", "Doe", 24, "john@email.com", "555-0001");
+        Customer keyla = new Customer(2L, "keyla_smith", "Keyla", "Smith", 28, "keila@email.com", "555-0002");
 
         customers.add(john);
         customers.add(keyla);
@@ -37,6 +37,33 @@ public class CustomerInMemoryRepository implements CustomerDataAccess {
     public Long insertCustomer(Customer customer) {
         customers.add(customer);
         return customer.getId();
+    }
+
+    @Override
+    public Optional<Customer> selectCustomerByPhoneNumber(String phoneNumber) {
+        return customers.stream()
+                .filter(c -> c.getPhoneNumber().equals(phoneNumber))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Customer> selectCustomerByEmail(String email) {
+        return customers.stream()
+                .filter(c -> c.getEmail().equals(email))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Customer> selectCustomerByUsername(String username) {
+        return customers.stream()
+                .filter(c -> c.getUsername().equals(username))
+                .findFirst();
+    }
+
+    @Override
+    public Boolean existsPersonWithUsername(String username) {
+        return customers.stream()
+                .anyMatch(customer -> customer.getUsername().equals(username));
     }
 
     @Override

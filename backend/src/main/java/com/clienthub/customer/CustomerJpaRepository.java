@@ -28,9 +28,29 @@ public class CustomerJpaRepository implements CustomerDataAccess {
     }
 
     @Override
+    public Optional<Customer> selectCustomerByPhoneNumber(String phoneNumber) {
+        return customerRepository.findByPhoneNumber(phoneNumber);
+    }
+    
+    @Override
+    public Optional<Customer> selectCustomerByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Customer> selectCustomerByUsername(String username) {
+        return customerRepository.findByUsername(username);
+    }
+
+    @Override
     public Long insertCustomer(Customer customer) {
         customerRepository.save(customer);
         return customer.getId();
+    }
+
+    @Override
+    public Boolean existsPersonWithUsername(String username) {
+        return customerRepository.existsCustomerByUsername(username);
     }
 
     @Override

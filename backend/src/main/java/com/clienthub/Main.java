@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Random;
+import java.util.UUID;
 
 @SpringBootApplication
 public class Main {
@@ -25,10 +26,15 @@ public class Main {
         Random random = new Random();
 
         return args -> {
+            String username = firstName.toLowerCase() + "." + lastName.toLowerCase() + "_" + UUID.randomUUID();
             Customer customer = new Customer(
-                    firstName + " " + lastName,
+                    random.nextLong(1, 10000),
+                    username,
+                    firstName,
+                    lastName,
                     random.nextInt(18, 99),
-                    firstName + "." + lastName + "@email.com");
+                    firstName.toLowerCase() + "." + lastName.toLowerCase() + "_" + UUID.randomUUID() + "@email.com",
+                    faker.phoneNumber().cellPhone());
 
             customerRepository.save(customer);
         };

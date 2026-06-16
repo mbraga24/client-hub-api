@@ -33,11 +33,13 @@ public class CustomerIntegrationTest {
         Faker faker = new Faker();
         Name fakerName = faker.name();
 
-        String name = fakerName.fullName();
+        String firstName = fakerName.firstName();
+        String lastName = fakerName.lastName();
         String email = fakerName.lastName() + "_" + UUID.randomUUID() + "@emailtesting.com";
         int age = RANDOM.nextInt(18, 99);
+        String phoneNumber = faker.phoneNumber().cellPhone();
         CustomerCreateRequest request = new CustomerCreateRequest(
-                name, email, age
+                firstName, lastName, email, age, phoneNumber
         );
 
         // create customer
@@ -63,11 +65,11 @@ public class CustomerIntegrationTest {
                 .getResponseBody();
 
         Customer expectedCustomer = new Customer(
-                name, age, email
+                null, null, firstName, lastName, age, email, phoneNumber
         );
 
         assertThat(allCustomers)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "appUserId", "username")
                 .contains(expectedCustomer);
 
         long customerId = allCustomers.stream()
@@ -94,11 +96,13 @@ public class CustomerIntegrationTest {
         Faker faker = new Faker();
         Name fakerName = faker.name();
 
-        String name = fakerName.fullName();
+        String firstName = fakerName.firstName();
+        String lastName = fakerName.lastName();
         String email = fakerName.lastName() + "_" + UUID.randomUUID() + "@emailtesting.com";
         int age = RANDOM.nextInt(18, 99);
+        String phoneNumber = faker.phoneNumber().cellPhone();
         CustomerCreateRequest request = new CustomerCreateRequest(
-                name, email, age
+                firstName, lastName, email, age, phoneNumber
         );
 
         // create customer
@@ -151,11 +155,13 @@ public class CustomerIntegrationTest {
         Faker faker = new Faker();
         Name fakerName = faker.name();
 
-        String name = fakerName.fullName();
+        String firstName = fakerName.firstName();
+        String lastName = fakerName.lastName();
         String email = fakerName.lastName() + "_" + UUID.randomUUID() + "@emailtesting.com";
         int age = RANDOM.nextInt(18, 99);
+        String phoneNumber = faker.phoneNumber().cellPhone();
 
-        CustomerCreateRequest request = new CustomerCreateRequest(name, email, age);
+        CustomerCreateRequest request = new CustomerCreateRequest(firstName, lastName, email, age, phoneNumber);
 
         // create customer
         webTestClient.post()
@@ -186,9 +192,11 @@ public class CustomerIntegrationTest {
                 .orElseThrow();
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                fakerName.fullName() + " Updated",
-                fakerName.lastName() + "@updatedEmail.com",
-                RANDOM.nextInt(18, 99));
+                fakerName.firstName() + " Updated",
+                fakerName.lastName() + " Updated",
+                faker.internet().safeEmailAddress(),
+                RANDOM.nextInt(18, 99),
+                faker.phoneNumber().cellPhone());
 
         // update customer
         webTestClient.put()
@@ -201,9 +209,8 @@ public class CustomerIntegrationTest {
                 .isNoContent();
 
         Customer expectedCustomer = new Customer(
-                updateRequest.name(),
-                updateRequest.age(),
-                updateRequest.email()
+                null, null, updateRequest.firstName(), updateRequest.lastName(),
+                updateRequest.age(), updateRequest.email(), updateRequest.phoneNumber()
         );
 
         expectedCustomer.setId(customerId);
@@ -219,7 +226,10 @@ public class CustomerIntegrationTest {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(updatedCustomer).isEqualTo(expectedCustomer);
+        assertThat(updatedCustomer)
+                .usingRecursiveComparison()
+                .ignoringFields("appUserId", "username")
+                .isEqualTo(expectedCustomer);
     }
 
 }

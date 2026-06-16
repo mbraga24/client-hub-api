@@ -1,8 +1,11 @@
 package com.clienthub.customer;
 
 public record CustomerUpdateRequest(
-        String name,
+        String username,
+        String firstName,
+        String lastName,
         String email,
-        Integer age
+        Integer age,
+        String phoneNumber
 ) {
 }

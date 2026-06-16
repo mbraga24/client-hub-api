@@ -9,11 +9,19 @@ public interface CustomerDataAccess {
 
      Optional<Customer> selectCustomerById(Long id);
 
+     Optional<Customer> selectCustomerByPhoneNumber(String phoneNumber);
+
+     Optional<Customer> selectCustomerByEmail(String email);
+
+     Optional<Customer> selectCustomerByUsername(String username);
+
      Long insertCustomer(Customer customer);
 
      void deleteCustomer(Long id);
 
      void updateCustomer(Customer customer);
+
+     Boolean existsPersonWithUsername(String username);
 
      boolean existsPersonWithEmail(String email);
 

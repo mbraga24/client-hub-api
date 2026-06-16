@@ -49,9 +49,11 @@ public class CustomerService {
             throw new DuplicatedResourceException("Customer with email [%s] already exist.".formatted(email));
         }
         Customer customer = new Customer(
-                customerCreateRequest.name(),
+                customerCreateRequest.firstName(),
+                customerCreateRequest.lastName(),
                 customerCreateRequest.age(),
-                customerCreateRequest.email()
+                customerCreateRequest.email(),
+                customerCreateRequest.phoneNumber()
         );
         log.info("addCustomer :: ADDING NEW CUSTOMER: {}", customer);
         return customerDAO.insertCustomer(customer);  
@@ -75,8 +77,13 @@ public class CustomerService {
         Customer customer = getCustomer(customerId);
         boolean changes = false;
 
-        if (updateRequest.name() != null && !customer.getName().equals(updateRequest.name())) {
-            customer.setName(updateRequest.name());
+        if (updateRequest.firstName() != null && !customer.getFirstName().equals(updateRequest.firstName())) {
+            customer.setFirstName(updateRequest.firstName());
+            changes = true;
+        }
+
+        if (updateRequest.lastName() != null && !customer.getLastName().equals(updateRequest.lastName())) {
+            customer.setLastName(updateRequest.lastName());
             changes = true;
         }
 
@@ -93,6 +100,11 @@ public class CustomerService {
                                 .formatted(updateRequest.email()));
             }
             customer.setEmail(updateRequest.email());
+            changes = true;
+        }
+
+        if (updateRequest.phoneNumber() != null && !customer.getPhoneNumber().equals(updateRequest.phoneNumber())) {
+            customer.setPhoneNumber(updateRequest.phoneNumber());
             changes = true;
         }
 
