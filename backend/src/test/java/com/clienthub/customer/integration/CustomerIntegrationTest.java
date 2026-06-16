@@ -27,19 +27,21 @@ public class CustomerIntegrationTest {
 
     private final String CUSTOMER_URI = "api/v1/customers";
     private final Random RANDOM = new Random();
+    private final Faker FAKER = new Faker();
 
     @Test
     void canRegisterACustomer() {
-        Faker faker = new Faker();
-        Name fakerName = faker.name();
+        Name fakerName = FAKER.name();
 
+        Long appUserId = RANDOM.nextLong(1, 10000);
         String firstName = fakerName.firstName();
         String lastName = fakerName.lastName();
+        String username = firstName.toLowerCase() + "." + lastName.toLowerCase() + "_" + UUID.randomUUID();
         String email = fakerName.lastName() + "_" + UUID.randomUUID() + "@emailtesting.com";
         int age = RANDOM.nextInt(18, 99);
-        String phoneNumber = faker.phoneNumber().cellPhone();
+        String phoneNumber = FAKER.phoneNumber().cellPhone();
         CustomerCreateRequest request = new CustomerCreateRequest(
-                firstName, lastName, email, age, phoneNumber
+                appUserId, username, firstName, lastName, email, age, phoneNumber
         );
 
         // create customer
@@ -64,21 +66,20 @@ public class CustomerIntegrationTest {
                 .returnResult()
                 .getResponseBody();
 
-        Customer expectedCustomer = new Customer(
-                null, null, firstName, lastName, age, email, phoneNumber
-        );
-
-        assertThat(allCustomers)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "appUserId", "username")
-                .contains(expectedCustomer);
-
-        long customerId = allCustomers.stream()
+       long customerId = allCustomers.stream()
                 .filter(customer -> customer.getEmail().equals(email))
                 .map(customer -> customer.getId())
                 .findFirst()
                 .orElseThrow();
 
+        Customer expectedCustomer = new Customer(
+                appUserId, username, firstName, lastName, age, email, phoneNumber
+        );
+
         expectedCustomer.setId(customerId);
+        expectedCustomer.setUsername(username);
+
+        assertThat(allCustomers).contains(expectedCustomer);
 
         webTestClient.get()
                 .uri(CUSTOMER_URI + "/{id}", customerId)
@@ -88,21 +89,24 @@ public class CustomerIntegrationTest {
                 .isOk()
                 .expectBody(new ParameterizedTypeReference<Customer>() {
                 })
-                .isEqualTo(expectedCustomer);
+                .value(actual -> assertThat(actual)
+                        .isEqualTo(expectedCustomer)
+                );
     }
 
     @Test
     void canDeleteCustomer() {
-        Faker faker = new Faker();
-        Name fakerName = faker.name();
+        Name fakerName = FAKER.name();
 
+        Long appUserId = RANDOM.nextLong(1, 10000);
         String firstName = fakerName.firstName();
         String lastName = fakerName.lastName();
+        String username = firstName.toLowerCase() + "." + lastName.toLowerCase() + "_" + UUID.randomUUID();
         String email = fakerName.lastName() + "_" + UUID.randomUUID() + "@emailtesting.com";
         int age = RANDOM.nextInt(18, 99);
-        String phoneNumber = faker.phoneNumber().cellPhone();
+        String phoneNumber = FAKER.phoneNumber().cellPhone();
         CustomerCreateRequest request = new CustomerCreateRequest(
-                firstName, lastName, email, age, phoneNumber
+                appUserId, username, firstName, lastName, email, age, phoneNumber
         );
 
         // create customer
@@ -152,16 +156,17 @@ public class CustomerIntegrationTest {
 
     @Test
     void canUpdateCustomer() {
-        Faker faker = new Faker();
-        Name fakerName = faker.name();
+        Name fakerName = FAKER.name();
 
+        Long appUserId = RANDOM.nextLong(1, 10000);
         String firstName = fakerName.firstName();
         String lastName = fakerName.lastName();
+        String username = firstName.toLowerCase() + "." + lastName.toLowerCase() + "_" + UUID.randomUUID();
         String email = fakerName.lastName() + "_" + UUID.randomUUID() + "@emailtesting.com";
         int age = RANDOM.nextInt(18, 99);
-        String phoneNumber = faker.phoneNumber().cellPhone();
+        String phoneNumber = FAKER.phoneNumber().cellPhone();
 
-        CustomerCreateRequest request = new CustomerCreateRequest(firstName, lastName, email, age, phoneNumber);
+        CustomerCreateRequest request = new CustomerCreateRequest(appUserId, username, firstName, lastName, email, age, phoneNumber);
 
         // create customer
         webTestClient.post()
@@ -191,12 +196,14 @@ public class CustomerIntegrationTest {
                 .findFirst()
                 .orElseThrow();
 
+        String newUsername = "updated_" + UUID.randomUUID();
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
+                newUsername,
                 fakerName.firstName() + " Updated",
                 fakerName.lastName() + " Updated",
-                faker.internet().safeEmailAddress(),
+                FAKER.internet().safeEmailAddress(),
                 RANDOM.nextInt(18, 99),
-                faker.phoneNumber().cellPhone());
+                FAKER.phoneNumber().cellPhone());
 
         // update customer
         webTestClient.put()
