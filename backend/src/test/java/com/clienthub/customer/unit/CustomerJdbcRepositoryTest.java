@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,10 +30,12 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
         );
     }
 
+    private final Random RANDOM = new Random();
+
     @Test
     void selectAllCustomers() {
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -52,7 +55,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void selectCustomerById() {
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -92,7 +95,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void insertCustomer() {
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -112,7 +115,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void deleteCustomer() {
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -142,7 +145,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -181,7 +184,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -221,7 +224,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -259,7 +262,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void updateAllCustomerProperties() {
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -311,7 +314,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void willNotUpdateWhenNothingToUpdate() {
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -348,7 +351,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void existsPersonWithEmail() {
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),
@@ -377,7 +380,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void existsPersonById() {
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                1L,
+                RANDOM.nextLong(1, 100000),
                 "user_" + UUID.randomUUID(),
                 FAKER.name().firstName(),
                 FAKER.name().lastName(),

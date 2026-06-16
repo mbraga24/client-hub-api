@@ -37,7 +37,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
     public Optional<Customer> selectCustomerById(Long id) {
         log.info("selectCustomerById :: FETCHING CUSTOMER WITH ID: [{}]", id);
         var sql = """
-                SELECT id, first_name, last_name, email, age, phone_number
+                SELECT id, app_user_id, username, first_name, last_name, email, age, phone_number
                 FROM customer
                 WHERE id = ?
                 """;

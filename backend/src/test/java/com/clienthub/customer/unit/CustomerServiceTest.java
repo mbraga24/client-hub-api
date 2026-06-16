@@ -74,7 +74,7 @@ class CustomerServiceTest {
     @Test
     void canAddCustomer() {
         CustomerCreateRequest customerRequest =
-                new CustomerCreateRequest(firstName, lastName, email, age, phoneNumber);
+                new CustomerCreateRequest(appUserId, username, firstName, lastName, email, age, phoneNumber);
 
         Mockito.when(customerDao.existsPersonWithEmail(email)).thenReturn(false);
         Mockito.when(customerDao.insertCustomer(any())).thenReturn(1L);
@@ -98,7 +98,7 @@ class CustomerServiceTest {
     @Test
     void willThrowExceptionIfEmailExists() {
         CustomerCreateRequest customerRequest =
-                new CustomerCreateRequest(firstName, lastName, email, age, phoneNumber);
+                new CustomerCreateRequest(appUserId, username, firstName, lastName, email, age, phoneNumber);
 
         Mockito.when(customerDao.existsPersonWithEmail(email)).thenReturn(true);
 
@@ -146,7 +146,9 @@ class CustomerServiceTest {
         long customerId = 10;
 
 
+        String newUsername = "updateduser";
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
+                newUsername,
                 newFirstName,
                 newLastName,
                 newEmail,
@@ -184,7 +186,7 @@ class CustomerServiceTest {
         String newFirstName = "Johnny";
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                newFirstName, null, null, null, null
+                null, newFirstName, null, null, null, null
         );
 
         Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
@@ -214,7 +216,7 @@ class CustomerServiceTest {
         String newEmail = "newUpdated@email.com";
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, null, newEmail, null, null
+                null, null, null, newEmail, null, null
         );
 
         Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
@@ -247,7 +249,7 @@ class CustomerServiceTest {
         int newAge = 5;
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, null, null, newAge, null
+                null, null, null, null, newAge, null
         );
 
         Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
@@ -276,7 +278,7 @@ class CustomerServiceTest {
         long customerId = 10;
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, null, null, null, null
+                null, null, null, null, null, null
         );
 
         Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
@@ -295,7 +297,7 @@ class CustomerServiceTest {
         String existingEmail = "exists_" + email;
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, null, existingEmail, null, null
+                null, null, null, existingEmail, null, null
         );
 
         Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
