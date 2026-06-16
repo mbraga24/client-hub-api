@@ -1,10 +1,10 @@
 # Client Management API
 
-A Spring Boot application that demonstrates customer management using REST APIs, PostgreSQL, Docker, Flyway, JPA, JDBC, automated testing, and CI/CD with GitHub Actions.
+A Spring Boot application that demonstrates customer management using REST APIs, PostgreSQL, Docker, Flyway, JPA, JDBC, automated testing, CI/CD with GitHub Actions, and SonarCloud code quality analysis.
 
 ## Overview
 
-This project implements a customer management API with CRUD operations, database migrations, PostgreSQL persistence, Docker-based deployment, automated unit and integration testing, and a CI/CD pipeline that builds and pushes Docker images to Docker Hub.
+This project implements a customer management API with CRUD operations, database migrations, PostgreSQL persistence, Docker-based deployment, automated unit and integration testing, code coverage with JaCoCo, static analysis with SonarCloud, and a CI/CD pipeline that builds and pushes Docker images to Docker Hub.
 
 ## Tech Stack
 
@@ -23,17 +23,20 @@ This project implements a customer management API with CRUD operations, database
 * Maven
 * Lombok
 * JavaFaker
+* JaCoCo
+* SonarCloud
 
 ## Features
 
-* Create customers
+* Create customers with username, first name, last name, email, age, and phone number
 * Retrieve all customers
 * Find customer by ID
-* Update customer information
+* Update customer information (with change detection)
 * Delete customers
 * PostgreSQL database persistence
 * Flyway database migrations
-* JPA and JDBC data access support
+* JPA and JDBC data access support (switchable via qualifier)
+* In-memory repository for testing
 * Dockerized PostgreSQL database
 * Dockerized Spring Boot API
 * Unit and integration testing
@@ -42,6 +45,8 @@ This project implements a customer management API with CRUD operations, database
 * CD pipeline for main branch deployments
 * Docker image build and push to Docker Hub
 * Slack deployment notifications
+* JaCoCo code coverage reports
+* SonarCloud static code analysis
 
 ## API Endpoints
 
@@ -53,6 +58,48 @@ This project implements a customer management API with CRUD operations, database
 | PUT    | `/api/v1/customers/{id}` | Updates an existing customer |
 | DELETE | `/api/v1/customers/{id}` | Deletes a customer           |
 
+### Request Bodies
+
+**POST /api/v1/customers**
+
+```json
+{
+  "appUserId": 1,
+  "username": "john_doe",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@email.com",
+  "age": 30,
+  "phoneNumber": "555-0001"
+}
+```
+
+**PUT /api/v1/customers/{id}**
+
+```json
+{
+  "username": "john_doe_updated",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john_new@email.com",
+  "age": 31,
+  "phoneNumber": "555-0002"
+}
+```
+
+## Customer Model
+
+| Field       | Type    | Constraints              |
+| ----------- | ------- | ------------------------ |
+| id          | Long    | Auto-generated (sequence)|
+| appUserId   | Long    | Not null, unique         |
+| username    | String  | Not null, unique         |
+| firstName   | String  | Not null                 |
+| lastName    | String  | Not null                 |
+| age         | Integer | Not null                 |
+| email       | String  | Not null, unique         |
+| phoneNumber | String  | Not null, unique         |
+
 ## Database Configuration
 
 The application uses PostgreSQL.
@@ -61,7 +108,7 @@ Default Docker Compose configuration:
 
 ```yml
 services:
-  customerdb:
+  customer-db:
     container_name: client-mgmt-postgres
     image: postgres:15.3
     environment:
@@ -76,7 +123,7 @@ services:
     container_name: client-mgmt-api
     image: mbraga01/client-management-api
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://customerdb:5432/${POSTGRES_DB}"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://customer-db:5432/${POSTGRES_DB}"
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -95,6 +142,16 @@ PostgreSQL is exposed on:
 localhost:5332
 ```
 
+### Database Migrations
+
+Flyway manages schema migrations located in `backend/src/main/resources/db/migration/`:
+
+| Version | Description                                           |
+| ------- | ----------------------------------------------------- |
+| V1      | Initial setup (customer table with name, email, age)  |
+| V2      | Add unique constraint to customer email               |
+| V3      | Split name into first/last name, add app_user_id, username, phone_number with unique constraints |
+
 ## CI/CD
 
 This project uses GitHub Actions for continuous integration and deployment.
@@ -111,6 +168,7 @@ It performs:
 * Maven build
 * Unit tests
 * Integration tests
+* SonarCloud static code analysis
 
 ```bash
 mvn -ntp -B verify
@@ -129,6 +187,7 @@ It performs:
 * Maven build and verification
 * Docker image build using Jib
 * Docker image push to Docker Hub
+* SonarCloud code coverage report
 * Slack deployment notifications
 
 Docker image:
@@ -146,6 +205,8 @@ Unit tests are handled by Surefire.
 Integration tests are handled by Failsafe and use a reserved random server port.
 
 Testcontainers is included to support PostgreSQL-based integration testing.
+
+JaCoCo generates code coverage reports during the verify phase.
 
 Run all tests:
 
@@ -179,15 +240,33 @@ The Docker Compose setup includes:
 ## Project Structure
 
 ```text
-backend/src/main/java/com/havefunwith
-├── customer
-├── exception
-├── config
-├── dto
-├── repository
-├── service
-└── ClientManagementApiApplication.java
+backend/src/main/java/com/clienthub
+├── customer/
+│   ├── Customer.java
+│   ├── CustomerController.java
+│   ├── CustomerCreateRequest.java
+│   ├── CustomerUpdateRequest.java
+│   ├── CustomerDataAccess.java
+│   ├── CustomerRepository.java
+│   ├── CustomerJpaRepository.java
+│   ├── CustomerJdbcRepository.java
+│   ├── CustomerInMemoryRepository.java
+│   ├── CustomerRowMapper.java
+│   └── CustomerService.java
+├── exception/
+│   ├── DuplicatedResourceException.java
+│   ├── ResourceNotChangedException.java
+│   └── ResourceNotFoundException.java
+└── Main.java
 ```
+
+## Error Handling
+
+| Exception                    | HTTP Status   |
+| ---------------------------- | ------------- |
+| ResourceNotFoundException    | 404 Not Found |
+| DuplicatedResourceException  | 409 Conflict  |
+| ResourceNotChangedException  | 304 Not Modified |
 
 ## Notes
 

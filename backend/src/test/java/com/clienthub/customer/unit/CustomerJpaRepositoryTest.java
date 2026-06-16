@@ -56,9 +56,13 @@ class CustomerJpaRepositoryTest {
     @Test
     void insertCustomer() {
         Customer customer = new Customer(
-                "John Doe",
+                1L,
+                "johndoe",
+                "John",
+                "Doe",
                 24,
-                "john_doe@email.com"
+                "john_doe@email.com",
+                "555-0001"
         );
 
         underTest.insertCustomer(customer);
@@ -100,9 +104,14 @@ class CustomerJpaRepositoryTest {
     @Test
     void updateCustomer() {
         Customer customer = new Customer(
-                "John Doe",
+                1L,
+                1L,
+                "johndoe",
+                "John",
+                "Doe",
                 24,
-                "john_doe@email.com"
+                "john_doe@email.com",
+                "555-0001"
         );
 
         underTest.updateCustomer(customer);

@@ -31,9 +31,13 @@ class CustomerServiceTest {
     @InjectMocks
     private CustomerService underTest;
 
-    private final String name = "John Doe";
+    private final Long appUserId = 1L;
+    private final String username = "johndoe";
+    private final String firstName = "John";
+    private final String lastName = "Doe";
     private final Integer age = 23;
     private final String email = "john_doe@email.com";
+    private final String phoneNumber = "555-0001";
 
     @Test
     void canGetAllCustomers() {
@@ -46,7 +50,7 @@ class CustomerServiceTest {
     @Test
     void canGetCustomer() {
         long customerId = 3;
-        Customer customer = new Customer(name, age, email);
+        Customer customer = new Customer(appUserId, username, firstName, lastName, age, email, phoneNumber);
 
         Mockito.when(customerDao.selectCustomerById(customerId))
                 .thenReturn(Optional.of(customer));
@@ -70,7 +74,7 @@ class CustomerServiceTest {
     @Test
     void canAddCustomer() {
         CustomerCreateRequest customerRequest =
-                new CustomerCreateRequest(name, email, age);
+                new CustomerCreateRequest(firstName, lastName, email, age, phoneNumber);
 
         Mockito.when(customerDao.existsPersonWithEmail(email)).thenReturn(false);
         Mockito.when(customerDao.insertCustomer(any())).thenReturn(1L);
@@ -84,15 +88,17 @@ class CustomerServiceTest {
         Customer capturedCustomer = customerArgumentCaptor.getValue();
 
         assertThat(capturedCustomer.getId()).isNull();
-        assertThat(capturedCustomer.getName()).isEqualTo(customerRequest.name());
+        assertThat(capturedCustomer.getFirstName()).isEqualTo(customerRequest.firstName());
+        assertThat(capturedCustomer.getLastName()).isEqualTo(customerRequest.lastName());
         assertThat(capturedCustomer.getEmail()).isEqualTo(customerRequest.email());
         assertThat(capturedCustomer.getAge()).isEqualTo(customerRequest.age());
+        assertThat(capturedCustomer.getPhoneNumber()).isEqualTo(customerRequest.phoneNumber());
     }
 
     @Test
     void willThrowExceptionIfEmailExists() {
         CustomerCreateRequest customerRequest =
-                new CustomerCreateRequest(name, email, age);
+                new CustomerCreateRequest(firstName, lastName, email, age, phoneNumber);
 
         Mockito.when(customerDao.existsPersonWithEmail(email)).thenReturn(true);
 
@@ -133,17 +139,22 @@ class CustomerServiceTest {
     @Test
     void willUpdateAllCustomerProperties() {
         String newEmail = "john123@email.com";
-        String newName = "Johnny";
+        String newFirstName = "Johnny";
+        String newLastName = "Dosonh";
         int newAge = 30;
+        String newPhoneNumber = "555-1110";
         long customerId = 10;
 
+
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                newName,
+                newFirstName,
+                newLastName,
                 newEmail,
-                newAge
+                newAge,
+                newPhoneNumber
         );
 
-        Customer customer = new Customer(customerId, name, age, email);
+        Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
 
         Mockito.when(customerDao.selectCustomerById(customerId))
                 .thenReturn(Optional.of(customer));
@@ -160,21 +171,23 @@ class CustomerServiceTest {
 
         Customer capturedCustomer = customerArgumentCaptor.getValue();
 
-        assertThat(capturedCustomer.getName()).isEqualTo(updateRequest.name());
+        assertThat(capturedCustomer.getFirstName()).isEqualTo(updateRequest.firstName());
+        assertThat(capturedCustomer.getLastName()).isEqualTo(updateRequest.lastName());
         assertThat(capturedCustomer.getEmail()).isEqualTo(updateRequest.email());
         assertThat(capturedCustomer.getAge()).isEqualTo(updateRequest.age());
+        assertThat(capturedCustomer.getPhoneNumber()).isEqualTo(updateRequest.phoneNumber());
     }
 
     @Test
-    void willUpdateOnlyCustomerName() {
+    void willUpdateOnlyCustomerFirstName() {
         long customerId = 10;
-        String newName = "Johnny";
+        String newFirstName = "Johnny";
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                newName, null, null
+                newFirstName, null, null, null, null
         );
 
-        Customer customer = new Customer(customerId, name, age, email);
+        Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
 
         Mockito.when(customerDao.selectCustomerById(customerId))
                 .thenReturn(Optional.of(customer));
@@ -188,9 +201,11 @@ class CustomerServiceTest {
 
         Customer capturedCustomer = customerArgumentCaptor.getValue();
 
-        assertThat(capturedCustomer.getName()).isEqualTo(updateRequest.name());
+        assertThat(capturedCustomer.getFirstName()).isEqualTo(newFirstName);
+        assertThat(capturedCustomer.getLastName()).isEqualTo(lastName);
         assertThat(capturedCustomer.getEmail()).isEqualTo(email);
         assertThat(capturedCustomer.getAge()).isEqualTo(age);
+        assertThat(capturedCustomer.getPhoneNumber()).isEqualTo(phoneNumber);
     }
 
     @Test
@@ -199,10 +214,10 @@ class CustomerServiceTest {
         String newEmail = "newUpdated@email.com";
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, newEmail, null
+                null, null, newEmail, null, null
         );
 
-        Customer customer = new Customer(name, age, email);
+        Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
 
         Mockito.when(customerDao.selectCustomerById(customerId))
                 .thenReturn(Optional.of(customer));
@@ -219,9 +234,11 @@ class CustomerServiceTest {
 
         Customer capturedCustomer = customerArgumentCaptor.getValue();
 
-        assertThat(capturedCustomer.getName()).isEqualTo(name);
-        assertThat(capturedCustomer.getEmail()).isEqualTo(updateRequest.email());
+        assertThat(capturedCustomer.getFirstName()).isEqualTo(firstName);
+        assertThat(capturedCustomer.getLastName()).isEqualTo(lastName);
+        assertThat(capturedCustomer.getEmail()).isEqualTo(newEmail);
         assertThat(capturedCustomer.getAge()).isEqualTo(age);
+        assertThat(capturedCustomer.getPhoneNumber()).isEqualTo(phoneNumber);
     }
 
     @Test
@@ -230,10 +247,10 @@ class CustomerServiceTest {
         int newAge = 5;
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, null, newAge
+                null, null, null, newAge, null
         );
 
-        Customer customer = new Customer(name, age, email);
+        Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
 
         Mockito.when(customerDao.selectCustomerById(customerId))
                 .thenReturn(Optional.of(customer));
@@ -247,18 +264,22 @@ class CustomerServiceTest {
 
         Customer capturedCustomer = customerArgumentCaptor.getValue();
 
-        assertThat(capturedCustomer.getName()).isEqualTo(name);
+        assertThat(capturedCustomer.getFirstName()).isEqualTo(firstName);
+        assertThat(capturedCustomer.getLastName()).isEqualTo(lastName);
         assertThat(capturedCustomer.getEmail()).isEqualTo(email);
-        assertThat(capturedCustomer.getAge()).isEqualTo(updateRequest.age());
+        assertThat(capturedCustomer.getAge()).isEqualTo(newAge);
+        assertThat(capturedCustomer.getPhoneNumber()).isEqualTo(phoneNumber);
     }
 
     @Test
     void updateWillThrowResourceNotChangeException() {
         long customerId = 10;
 
-        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(null, null, null);
+        CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
+                null, null, null, null, null
+        );
 
-        Customer customer = new Customer(name, age, email);
+        Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
 
         Mockito.when(customerDao.selectCustomerById(customerId))
                 .thenReturn(Optional.of(customer));
@@ -274,10 +295,10 @@ class CustomerServiceTest {
         String existingEmail = "exists_" + email;
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, existingEmail, null
+                null, null, existingEmail, null, null
         );
 
-        Customer customer = new Customer(name, age, email);
+        Customer customer = new Customer(customerId, appUserId, username, firstName, lastName, age, email, phoneNumber);
 
         Mockito.when(customerDao.selectCustomerById(customerId))
                 .thenReturn(Optional.of(customer));

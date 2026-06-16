@@ -31,11 +31,14 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void selectAllCustomers() {
-        String name = FAKER.name().fullName();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID()
+                FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID(),
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);
@@ -47,12 +50,15 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void selectCustomerById() {
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
         underTest.insertCustomer(customer);
 
@@ -68,7 +74,8 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
             assertThat(c.getId()).isEqualTo(customerId);
             assertThat(c.getAge()).isEqualTo(customer.getAge());
             assertThat(c.getEmail()).isEqualTo(customer.getEmail());
-            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getFirstName()).isEqualTo(customer.getFirstName());
+            assertThat(c.getLastName()).isEqualTo(customer.getLastName());
         });
     }
 
@@ -83,12 +90,15 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void insertCustomer() {
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);
@@ -100,12 +110,15 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void deleteCustomer() {
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);
@@ -124,15 +137,18 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     }
 
     @Test
-    void updateCustomerName() {
-        String newName = "John Doe";
+    void updateCustomerFirstName() {
+        String newFirstName = "Johnny";
 
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
         underTest.insertCustomer(customer);
 
@@ -144,7 +160,7 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         Customer updateCustomer = new Customer();
         updateCustomer.setId(customerId);
-        updateCustomer.setName(newName);
+        updateCustomer.setFirstName(newFirstName);
 
         underTest.updateCustomer(updateCustomer);
 
@@ -152,7 +168,8 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(updateCustomer.getId());
-            assertThat(c.getName()).isEqualTo(newName);
+            assertThat(c.getFirstName()).isEqualTo(newFirstName);
+            assertThat(c.getLastName()).isEqualTo(customer.getLastName());
             assertThat(c.getEmail()).isEqualTo(customer.getEmail());
             assertThat(c.getAge()).isEqualTo(customer.getAge());
         });
@@ -162,12 +179,15 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
     void updateCustomerEmail() {
         String newEmail = FAKER.internet().safeEmailAddress() + "_updated";
 
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);
@@ -188,23 +208,26 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(updateCustomer.getId());
-            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getFirstName()).isEqualTo(customer.getFirstName());
+            assertThat(c.getLastName()).isEqualTo(customer.getLastName());
             assertThat(c.getEmail()).isEqualTo(newEmail);
             assertThat(c.getAge()).isEqualTo(customer.getAge());
         });
-
     }
 
     @Test
     void updateCustomerAge() {
         int newAge = 80;
 
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);
@@ -225,7 +248,8 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(updateCustomer.getId());
-            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getFirstName()).isEqualTo(customer.getFirstName());
+            assertThat(c.getLastName()).isEqualTo(customer.getLastName());
             assertThat(c.getEmail()).isEqualTo(customer.getEmail());
             assertThat(c.getAge()).isEqualTo(newAge);
         });
@@ -233,17 +257,22 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void updateAllCustomerProperties() {
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
-        String newName = "Updated " + name;
+        String newFirstName = "UpdatedFirst";
+        String newLastName = "UpdatedLast";
         String newEmail = "updated-" + email;
         int newAge = 100;
+        String newPhone = "555-9999";
 
         underTest.insertCustomer(customer);
 
@@ -255,9 +284,13 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         Customer updateCustomer = new Customer(
                 customerId,
-                newName,
+                null,
+                null,
+                newFirstName,
+                newLastName,
                 newAge,
-                newEmail
+                newEmail,
+                newPhone
         );
 
         underTest.updateCustomer(updateCustomer);
@@ -266,21 +299,25 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(updateCustomer.getId());
-            assertThat(c.getName()).isEqualTo(newName);
+            assertThat(c.getFirstName()).isEqualTo(newFirstName);
+            assertThat(c.getLastName()).isEqualTo(newLastName);
             assertThat(c.getEmail()).isEqualTo(newEmail);
             assertThat(c.getAge()).isEqualTo(newAge);
+            assertThat(c.getPhoneNumber()).isEqualTo(newPhone);
         });
     }
 
     @Test
     void willNotUpdateWhenNothingToUpdate() {
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
-        int age = 20;
         Customer customer = new Customer(
-                name,
-                age,
-                email
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
+                20,
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);
@@ -300,7 +337,8 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(customerId);
-            assertThat(c.getName()).isEqualTo(customer.getName());
+            assertThat(c.getFirstName()).isEqualTo(customer.getFirstName());
+            assertThat(c.getLastName()).isEqualTo(customer.getLastName());
             assertThat(c.getEmail()).isEqualTo(customer.getEmail());
             assertThat(c.getAge()).isEqualTo(customer.getAge());
         });
@@ -308,12 +346,15 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void existsPersonWithEmail() {
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);
@@ -334,12 +375,15 @@ class CustomerJdbcRepositoryTest extends AbstractTestcontainers {
 
     @Test
     void existsPersonById() {
-        String name = FAKER.name().fullName();
         String email = FAKER.internet().safeEmailAddress() + "." + UUID.randomUUID();
         Customer customer = new Customer(
-                name,
+                1L,
+                "user_" + UUID.randomUUID(),
+                FAKER.name().firstName(),
+                FAKER.name().lastName(),
                 20,
-                email
+                email,
+                FAKER.phoneNumber().cellPhone()
         );
 
         underTest.insertCustomer(customer);

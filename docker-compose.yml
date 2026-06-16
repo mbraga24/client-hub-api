@@ -1,5 +1,5 @@
 services:
-  customerdb:
+  customer-db:
     container_name: client-mgmt-postgres
     image: postgres:15.3
     environment:
@@ -8,34 +8,33 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: /data/postgres
     volumes:
-      - customerdb:/data/postgres
+      - customer-db:/data/postgres
     ports:
       - "5332:5432"
     networks:
-      - customerdb-network
+      - customer-network
     restart: unless-stopped
 
   client-mgmt-api:
     container_name: client-mgmt-api
     image: mbraga01/client-management-api
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://customerdb:5432/${POSTGRES_DB}"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://customer-db:5432/${POSTGRES_DB}"
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "8088:8080"
     networks:
-      - customerdb-network
+      - customer-network
     depends_on:
-      - customerdb
+      - customer-db
     restart: unless-stopped
 #    command:
-#      - --spring.datasource.url=jdbc:postgresql://customerdb:5432/customer
+#      - --spring.datasource.url=jdbc:postgresql://customer-db:5432/customer
 
 networks:
-  customerdb-network:
+  customer-network:
     driver: bridge
 
 volumes:
-  customerdb:
-  pgadmin:
+  customer-db:

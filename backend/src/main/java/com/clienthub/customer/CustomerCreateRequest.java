@@ -1,8 +1,12 @@
 package com.clienthub.customer;
 
 public record CustomerCreateRequest(
-        String name,
+        Long appUserId,
+        String username,
+        String firstName,
+        String lastName,
         String email,
-        Integer age
+        Integer age,
+        String phoneNumber
 ) {
 }
