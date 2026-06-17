@@ -2,7 +2,7 @@ package com.clienthub.customer.unit;
 
 import com.clienthub.AbstractTestcontainers;
 import com.clienthub.customer.Customer;
-import com.clienthub.customer.CustomerJdbcRepository;
+import com.clienthub.demo.CustomerJdbcRepository;
 import com.clienthub.customer.CustomerRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
