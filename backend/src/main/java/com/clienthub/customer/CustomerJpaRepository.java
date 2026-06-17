@@ -1,5 +1,6 @@
 package com.clienthub.customer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Optional;
 /*
     Data Access Service Layer
  */
+@Slf4j
 @Repository("jpa")
 public class CustomerJpaRepository implements CustomerDataAccess {
 
@@ -44,7 +46,9 @@ public class CustomerJpaRepository implements CustomerDataAccess {
 
     @Override
     public Long insertCustomer(Customer customer) {
+        log.info("insertCustomer :: saving customer with username [{}]", customer.getUsername());
         customerRepository.save(customer);
+        log.info("insertCustomer :: customer saved with id [{}]", customer.getId());
         return customer.getId();
     }
 
@@ -65,11 +69,13 @@ public class CustomerJpaRepository implements CustomerDataAccess {
 
     @Override
     public void deleteCustomer(Long id) {
+        log.info("deleteCustomer :: deleting customer with id [{}]", id);
         customerRepository.deleteById(id);
     }
 
     @Override
     public void updateCustomer(Customer customer) {
+        log.info("updateCustomer :: updating customer with id [{}]", customer.getId());
         customerRepository.save(customer);
     }
 
