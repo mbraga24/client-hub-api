@@ -1,8 +1,5 @@
-package com.clienthub.demo;
+package com.clienthub.customer;
 
-import com.clienthub.customer.Customer;
-import com.clienthub.customer.CustomerDataAccess;
-import com.clienthub.customer.CustomerRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.lang.NonNull;
@@ -12,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /*
-    Data Access Layer - JDBC Demo Implementation
+    Data Access Layer
  */
 @Slf4j
 @Repository("jdbc")
@@ -28,7 +25,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
 
     @Override
     public List<Customer> selectAllCustomers() {
-        log.info("selectAllCustomers :: FETCHING ALL CUSTOMERS");
+        log.info("selectAllCustomers :: fetching all customers");
         var sql = """
                 SELECT id, app_user_id, username, first_name, last_name, email, age, phone_number 
                 FROM customer;
@@ -38,7 +35,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
 
     @Override
     public Optional<Customer> selectCustomerById(Long id) {
-        log.info("selectCustomerById :: FETCHING CUSTOMER WITH ID: [{}]", id);
+        log.info("selectCustomerById :: fetching customer with id: [{}]", id);
         var sql = """
                 SELECT id, app_user_id, username, first_name, last_name, email, age, phone_number
                 FROM customer
@@ -104,20 +101,20 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                 customer.getAge(),
                 customer.getPhoneNumber()
         );
-        log.info("insertCustomer :: [{}] ROW ADDED", customerId);
+        log.info("insertCustomer :: [{}] row added", customerId);
         return customerId;
     }
 
     @Override
     public void deleteCustomer(Long id) {
-        log.info("deleteCustomer :: DELETE CUSTOMER OF ID [{}]", id);
+        log.info("deleteCustomer :: delete customer of id [{}]", id);
         var sql = """
                 DELETE 
                 FROM customer
                 WHERE id = ?
                 """;
         int result = jdbcTemplate.update(sql, id);
-        log.info("deleteCustomer :: [{}] ROW DELETED", result);
+        log.info("deleteCustomer :: [{}] row deleted", result);
     }
 
     @Override
@@ -148,7 +145,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         sql,
                         customer.getEmail(),
                         customer.getId());
-                log.info("updateCustomer :: CUSTOMER [{}] UPDATED", customer.getEmail());
+                log.info("updateCustomer :: customer [{}] updated", customer.getEmail());
         }
 
         if (customer.getFirstName() != null) {
@@ -161,7 +158,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         sql,
                         customer.getFirstName(),
                         customer.getId());
-                log.info("updateCustomer :: CUSTOMER [{}] UPDATED", customer.getFirstName());
+                log.info("updateCustomer :: customer [{}] updated", customer.getFirstName());
         }
 
         if (customer.getLastName() != null) {
@@ -174,7 +171,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         sql,
                         customer.getLastName(),
                         customer.getId());
-                log.info("updateCustomer :: CUSTOMER [{}] UPDATED", customer.getLastName());
+                log.info("updateCustomer :: customer [{}] updated", customer.getLastName());
         }
 
         if (customer.getPhoneNumber() != null) {
@@ -197,7 +194,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         sql,
                         customer.getAge(),
                         customer.getId());
-                log.info("updateCustomer :: CUSTOMER [{}] UPDATED", customer.getAge());
+                log.info("updateCustomer :: customer [{}] updated", customer.getAge());
         }
     }
 
@@ -215,7 +212,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
 
     @Override
     public boolean existsPersonWithEmail(String email) {
-        log.info("existsPersonWithEmail :: CHECKING IF CUSTOMER WITH EMAIL [{}] EXISTS", email);
+        log.info("existsPersonWithEmail :: checking if customer with email [{}] exists", email);
         var sql = """
                 SELECT COUNT(email)
                 FROM customer
@@ -227,7 +224,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
 
     @Override
     public boolean existsPersonById(Long id) {
-        log.info("existsPersonById :: CHECKING IF CUSTOMER WITH ID [{}] EXISTS", id);
+        log.info("existsPersonById :: checking if customer with id [{}] exists", id);
         var sql = """
                 SELECT COUNT(id)
                 FROM customer
