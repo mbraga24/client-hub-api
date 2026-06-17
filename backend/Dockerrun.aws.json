@@ -13,10 +13,19 @@
         }
       ],
       "environment": [
-        {
-          "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://awseb-e-pmajcknvv2-stack-awsebrdsdatabase-wo12kyjgjspa.cihdls59lxtr.us-east-2.rds.amazonaws.com:5432/customer"
-        }
+        // {
+        //   "name": "SPRING_DATASOURCE_URL",
+        //   "value": "jdbc:postgresql://awseb-e-pmajcknvv2-stack-awsebrdsdatabase-wo12kyjgjspa.cihdls59lxtr.us-east-2.rds.amazonaws.com:5432/customer"
+        // }
+        // ,
+        // {
+        //   "name": "SPRING_DATASOURCE_USERNAME",
+        //   "value": ""
+        // },
+        // {
+        //   "name": "SPRING_DATASOURCE_PASSWORD",
+        //   "value": ""
+        // }
       ]
     }
   ]

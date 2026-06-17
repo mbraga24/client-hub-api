@@ -1,6 +1,6 @@
 name: CD - Deploy Backend
 # -------------------------------------------------------------------------
-# Trigger: on push to main (backend changes) or manual dispatch
+# Trigger: on push to main (backend changes) or manual trigger
 # -------------------------------------------------------------------------
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
       - backend/**
       - .github/workflows/backend-cd.yml
 # -------------------------------------------------------------------------
-# PostgreSQL service container database set up
+# PostgreSQL service container database 
 # -------------------------------------------------------------------------
 jobs:
   deploy:
@@ -107,7 +107,7 @@ jobs:
           ${{ secrets.SLACK_WEBHOOK_URL }}
           
       # -------------------------------------------------------------------------
-      # AWS Elastic Beanstalk deployment steps (commented out - not in use)
+      # AWS Elastic Beanstalk deployment steps
       # -------------------------------------------------------------------------
       # # Update Dockerrun.aws.json file with new image tag
       # - name: Update Dockerrun.aws.json API image tag with new build number
