@@ -2,8 +2,8 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "client-management-api",
-      "image": "mbraga01/client-management-api:17.11.2023.14.29.39",
+      "name": "client-hub-api",
+      "image": "mbraga01/client-hub-api:17.11.2023.14.29.39",
       "essential": true,
       "memory": 512,
       "portMappings": [

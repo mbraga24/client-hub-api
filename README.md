@@ -1,4 +1,4 @@
-# Client Management API
+# Client Hub API
 
 A Spring Boot application that demonstrates customer management using REST APIs, PostgreSQL, Docker, Flyway, JPA, JDBC, automated testing, CI/CD with GitHub Actions, and SonarCloud code quality analysis.
 
@@ -109,7 +109,7 @@ Default Docker Compose configuration:
 ```yml
 services:
   customer-db:
-    container_name: client-mgmt-postgres
+    container_name: client-hub-postgres
     image: postgres:15.3
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -119,9 +119,9 @@ services:
     ports:
       - "5332:5432"
 
-  client-mgmt-api:
-    container_name: client-mgmt-api
-    image: mbraga01/client-management-api
+  client-hub-api:
+    container_name: client-hub-api
+    image: mbraga01/client-hub-api
     environment:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://customer-db:5432/${POSTGRES_DB}"
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
@@ -193,7 +193,7 @@ It performs:
 Docker image:
 
 ```text
-mbraga01/client-management-api
+mbraga01/client-hub-api
 ```
 
 ## Testing
