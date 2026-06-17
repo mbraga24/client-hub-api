@@ -1,5 +1,8 @@
-package com.clienthub.customer;
+package com.clienthub.demo;
 
+import com.clienthub.customer.Customer;
+import com.clienthub.customer.CustomerDataAccess;
+import com.clienthub.customer.CustomerRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.lang.NonNull;
@@ -87,6 +90,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
 
     @Override
     public Long insertCustomer(Customer customer) {
+        log.info("insertCustomer :: inserting customer with username [{}]", customer.getUsername());
         var sql = """
                 INSERT INTO customer (app_user_id, username, first_name, last_name, email, age, phone_number)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -101,24 +105,25 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                 customer.getAge(),
                 customer.getPhoneNumber()
         );
-        log.info("insertCustomer :: [{}] row added", customerId);
+        log.info("insertCustomer :: customer inserted with id [{}]", customerId);
         return customerId;
     }
 
     @Override
     public void deleteCustomer(Long id) {
-        log.info("deleteCustomer :: delete customer of id [{}]", id);
+        log.info("deleteCustomer :: deleting customer with id [{}]", id);
         var sql = """
                 DELETE 
                 FROM customer
                 WHERE id = ?
                 """;
         int result = jdbcTemplate.update(sql, id);
-        log.info("deleteCustomer :: [{}] row deleted", result);
+        log.info("deleteCustomer :: customer deleted, [{}] row affected", result);
     }
 
     @Override
     public void updateCustomer(Customer customer) {
+        log.info("updateCustomer :: updating customer with id [{}]", customer.getId());
         var sql = "";
 
         if (customer.getUsername() != null) {
@@ -127,12 +132,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         SET username = ?
                         WHERE id = ?
                         """;
-
-                jdbcTemplate.update(
-                        sql,
-                        customer.getUsername(),
-                        customer.getId()
-                );
+                jdbcTemplate.update(sql, customer.getUsername(), customer.getId());
         }
 
         if (customer.getEmail() != null) {
@@ -141,11 +141,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         SET email = ?
                         WHERE id = ? 
                         """;
-                jdbcTemplate.update(
-                        sql,
-                        customer.getEmail(),
-                        customer.getId());
-                log.info("updateCustomer :: customer [{}] updated", customer.getEmail());
+                jdbcTemplate.update(sql, customer.getEmail(), customer.getId());
         }
 
         if (customer.getFirstName() != null) {
@@ -154,11 +150,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         SET first_name = ?
                         WHERE id = ?
                         """;
-                jdbcTemplate.update(
-                        sql,
-                        customer.getFirstName(),
-                        customer.getId());
-                log.info("updateCustomer :: customer [{}] updated", customer.getFirstName());
+                jdbcTemplate.update(sql, customer.getFirstName(), customer.getId());
         }
 
         if (customer.getLastName() != null) {
@@ -167,11 +159,7 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         SET last_name = ?
                         WHERE id = ?
                         """;
-                jdbcTemplate.update(
-                        sql,
-                        customer.getLastName(),
-                        customer.getId());
-                log.info("updateCustomer :: customer [{}] updated", customer.getLastName());
+                jdbcTemplate.update(sql, customer.getLastName(), customer.getId());
         }
 
         if (customer.getPhoneNumber() != null) {
@@ -179,9 +167,8 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         UPDATE customer
                         SET phone_number = ?
                         WHERE id = ?
-                                """;
+                        """;
                 jdbcTemplate.update(sql, customer.getPhoneNumber(), customer.getId());
-                log.info("updateCustomer :: customer [{}] updated", customer.getPhoneNumber());
         }
 
         if (customer.getAge() != null) {
@@ -190,12 +177,10 @@ public class CustomerJdbcRepository implements CustomerDataAccess {
                         SET age = ?
                         WHERE id = ?
                         """;
-                jdbcTemplate.update(
-                        sql,
-                        customer.getAge(),
-                        customer.getId());
-                log.info("updateCustomer :: customer [{}] updated", customer.getAge());
+                jdbcTemplate.update(sql, customer.getAge(), customer.getId());
         }
+
+        log.info("updateCustomer :: customer with id [{}] updated", customer.getId());
     }
 
     @Override
