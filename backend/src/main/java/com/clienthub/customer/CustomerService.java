@@ -25,16 +25,16 @@ public class CustomerService {
 
     @Transactional(readOnly = true)
     public List<Customer> getAllCustomers() {
-        log.info("getAllCustomers :: FETCHING ALL CUSTOMERS");
+        log.info("getAllCustomers :: fetching all customers");
         return customerDAO.selectAllCustomers();
     }
 
     @Transactional(readOnly = true)
     public Customer getCustomer(Long id) {
-        log.info("getCustomer :: FETCHING CUSTOMER WITH ID: [{}]", id);
+        log.info("getCustomer :: fetching customer with id: [{}]", id);
         return customerDAO.selectCustomerById(id)
                 .orElseThrow(() -> { 
-                    log.warn("getCustomer :: CUSTOMER NOT FOUND WITH ID: [{}]", id);
+                    log.warn("getCustomer :: customer not found with id: [{}]", id);
                     return new ResourceNotFoundException(
                         "Customer with id [%s] does not exist".formatted(id)
                     );
@@ -45,7 +45,7 @@ public class CustomerService {
     public Long addCustomer(CustomerCreateRequest customerCreateRequest) {
         String email = customerCreateRequest.email();
         if (customerDAO.existsPersonWithEmail(email)) {
-            log.error("addCustomer :: DUPLICATED EMAIL DETECTED: [{}]", email);
+            log.error("addCustomer :: duplicated email detected: [{}]", email);
             throw new DuplicatedResourceException("Customer with email [%s] already exist.".formatted(email));
         }
         Customer customer = new Customer(
@@ -57,15 +57,15 @@ public class CustomerService {
                 customerCreateRequest.email(),
                 customerCreateRequest.phoneNumber()
         );
-        log.info("addCustomer :: ADDING NEW CUSTOMER: {}", customer);
+        log.info("addCustomer :: adding new customer: {}", customer);
         return customerDAO.insertCustomer(customer);  
     }
 
     @Transactional
     public void deleteCustomer(Long customerId) {
-        log.info("deleteCustomer :: DELETING CUSTOMER WITH ID: {}", customerId);
+        log.info("deleteCustomer :: deleting customer with id: {}", customerId);
         if (!customerDAO.existsPersonById(customerId)) {
-            log.warn("deleteCustomer :: CUSTOMER NOT FOUND WITH ID: {}", customerId);
+            log.warn("deleteCustomer :: customer not found with id: {}", customerId);
             throw new ResourceNotFoundException(
                     "Customer with id [%s] was not found.".formatted(customerId)
             );
@@ -75,7 +75,7 @@ public class CustomerService {
 
     @Transactional
     public void updateCustomer(Long customerId, CustomerUpdateRequest updateRequest) {
-        log.info("updateCustomer :: UPDATING CUSTOMER WITH ID: [{}]", customerId);
+        log.info("updateCustomer :: updating customer with id: [{}]", customerId);
         Customer customer = getCustomer(customerId);
         boolean changes = false;
 
@@ -96,7 +96,7 @@ public class CustomerService {
 
         if (updateRequest.email() != null && !customer.getEmail().equals(updateRequest.email())) {
             if (customerDAO.existsPersonWithEmail(updateRequest.email())) {
-                log.error("updateCustomer :: DUPLICATED EMAIL DETECTED: [{}]", updateRequest.email());
+                log.error("updateCustomer :: duplicated email detected: [{}]", updateRequest.email());
                 throw new DuplicatedResourceException(
                         "Customer with email [%s] already exist."
                                 .formatted(updateRequest.email()));
@@ -111,12 +111,12 @@ public class CustomerService {
         }
 
         if (!changes) {
-            log.warn("updateCustomer :: NO DATA CHANGES FOUND FOR CUSTOMER WITH ID: [{}]", customerId);
+            log.warn("updateCustomer :: no data changes found for customer with id: [{}]", customerId);
             throw new ResourceNotChangedException("No data changes found");
         }
 
         customerDAO.updateCustomer(customer);
-        log.info("updateCustomer :: CUSTOMER WITH ID [{}] UPDATED SUCCESSFULLY", customerId);
+        log.info("updateCustomer :: customer with id [{}] updated successfully", customerId);
     }
 
 }
