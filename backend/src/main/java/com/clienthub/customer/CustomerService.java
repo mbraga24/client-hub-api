@@ -36,7 +36,7 @@ public class CustomerService {
                 .orElseThrow(() -> { 
                     log.warn("getCustomer :: customer not found with id: [{}]", id);
                     return new ResourceNotFoundException(
-                        "Customer with id [%s] does not exist".formatted(id)
+                        String.format("Customer with id [%s] does not exist", id)
                     );
                 });
     }
@@ -45,8 +45,8 @@ public class CustomerService {
     public Long addCustomer(CustomerCreateRequest customerCreateRequest) {
         String email = customerCreateRequest.email();
         if (customerDAO.existsPersonWithEmail(email)) {
-            log.error("addCustomer :: duplicated email detected: [{}]", email);
-            throw new DuplicatedResourceException("Customer with email [%s] already exist.".formatted(email));
+            log.warn("addCustomer :: duplicated email detected: [{}]", email);
+            throw new DuplicatedResourceException(String.format("Customer with email [%s] already exist.", email));
         }
         Customer customer = new Customer(
                 customerCreateRequest.appUserId(),
@@ -67,7 +67,7 @@ public class CustomerService {
         if (!customerDAO.existsPersonById(customerId)) {
             log.warn("deleteCustomer :: customer not found with id: {}", customerId);
             throw new ResourceNotFoundException(
-                    "Customer with id [%s] was not found.".formatted(customerId)
+                    String.format("Customer with id [%s] was not found.", customerId)
             );
         }
         customerDAO.deleteCustomer(customerId);
@@ -96,10 +96,9 @@ public class CustomerService {
 
         if (updateRequest.email() != null && !customer.getEmail().equals(updateRequest.email())) {
             if (customerDAO.existsPersonWithEmail(updateRequest.email())) {
-                log.error("updateCustomer :: duplicated email detected: [{}]", updateRequest.email());
+                log.warn("updateCustomer :: duplicated email detected: [{}]", updateRequest.email());
                 throw new DuplicatedResourceException(
-                        "Customer with email [%s] already exist."
-                                .formatted(updateRequest.email()));
+                        String.format("Customer with email [%s] already exist.", updateRequest.email()));
             }
             customer.setEmail(updateRequest.email());
             changes = true;

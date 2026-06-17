@@ -3,6 +3,7 @@ package com.clienthub;
 import com.github.javafaker.Faker;
 import com.clienthub.customer.Customer;
 import com.clienthub.customer.CustomerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import java.util.Random;
 import java.util.UUID;
 
+@Slf4j
 @SpringBootApplication
 public class Main {
 
@@ -37,6 +39,7 @@ public class Main {
                     faker.phoneNumber().cellPhone());
 
             customerRepository.save(customer);
+            log.info("Startup :: seeded customer with username [{}]", username);
         };
     }
 }

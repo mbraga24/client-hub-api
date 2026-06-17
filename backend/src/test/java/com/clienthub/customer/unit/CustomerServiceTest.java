@@ -68,7 +68,7 @@ class CustomerServiceTest {
 
         assertThatThrownBy(() -> underTest.getCustomer(customerId))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Customer with id [%s] does not exist".formatted(customerId));
+                .hasMessage(String.format("Customer with id [%s] does not exist", customerId));
     }
 
     @Test
@@ -104,7 +104,7 @@ class CustomerServiceTest {
 
         assertThatThrownBy(() -> underTest.addCustomer(customerRequest))
                 .isInstanceOf(DuplicatedResourceException.class)
-                .hasMessage("Customer with email [%s] already exist.".formatted(email));
+                .hasMessage(String.format("Customer with email [%s] already exist.", email));
 
         Mockito.verify(customerDao, never()).insertCustomer(any());
     }
@@ -131,7 +131,7 @@ class CustomerServiceTest {
 
         assertThatThrownBy(() -> underTest.deleteCustomer(customerId))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Customer with id [%s] was not found.".formatted(customerId));
+                .hasMessage(String.format("Customer with id [%s] was not found.", customerId));
 
         Mockito.verify(customerDao, never()).deleteCustomer(any());
     }
@@ -310,7 +310,6 @@ class CustomerServiceTest {
 
         assertThatThrownBy(() -> underTest.updateCustomer(customerId, updateRequest))
                 .isInstanceOf(DuplicatedResourceException.class)
-                .hasMessage("Customer with email [%s] already exist."
-                        .formatted(existingEmail));
+                .hasMessage(String.format("Customer with email [%s] already exist.", existingEmail));
     }
 }
