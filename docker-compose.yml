@@ -1,6 +1,6 @@
 services:
   customer-db:
-    container_name: client-mgmt-postgres
+    container_name: client-hub-postgres
     image: postgres:15.3
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -15,9 +15,9 @@ services:
       - customer-network
     restart: unless-stopped
 
-  client-mgmt-api:
-    container_name: client-mgmt-api
-    image: mbraga01/client-management-api
+  client-hub-api:
+    container_name: client-hub-api
+    image: mbraga01/client-hub-api
     environment:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://customer-db:5432/${POSTGRES_DB}"
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}

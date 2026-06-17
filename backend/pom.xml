@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.clienthub</groupId>
-	<artifactId>client-management-api</artifactId>
+	<artifactId>client-hub-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>client-management-api</name>
+	<name>client-hub-api</name>
 	<organization>
 		<name>Marlon Braga</name>
 		<url>https://www.linkedin.com/in/marlon-braga/</url>
@@ -20,9 +20,9 @@
 	<properties>
 		<java.version>17</java.version>
 		<docker.username>mbraga01</docker.username>
-		<docker.image.name>client-management-api</docker.image.name>
+		<docker.image.name>client-hub-api</docker.image.name>
 		<docker.image.tag/>
-		<sonar.projectKey>mbraga24_client-management-api</sonar.projectKey>
+		<sonar.projectKey>mbraga24_client-hub-api</sonar.projectKey>
 		<sonar.organization>mbraga24</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
